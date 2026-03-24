@@ -1,0 +1,7 @@
+data/
+*.rrd
+__pycache__/
+*.pyc
+.env
+*.tgz
+*.zip
