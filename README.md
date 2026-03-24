@@ -45,14 +45,14 @@ These numbers come from `src/test_relocalization.py` (full pass through 0–300 
 
 ## Roadmap
 
-- GPU-accelerated SLAM pipeline  
-- 3D landmark visualization  
-- Map persistence and relocalization  
-- [x] Dense RGB-D point cloud reconstruction  
-- [ ] Dense reconstruction (Open3D TSDF)  
-- Semantic object detection (YOLOv8)  
-- Web-based 3D visualization  
-- Live deployment on Jetson Orin  
+- [x] GPU-accelerated SLAM pipeline
+- [x] 3D landmark visualization
+- [x] Map persistence and relocalization
+- [x] Dense RGB-D point cloud reconstruction
+- [ ] Dense reconstruction (Open3D TSDF)
+- [ ] Semantic object detection (YOLOv8)
+- [ ] Web-based 3D visualization
+- [ ] Live deployment on Jetson Orin
 
 ## Usage
 
