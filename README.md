@@ -18,6 +18,8 @@ Validated on **TUM RGB-D [freiburg3 long office household](https://cvg.cit.tum.d
 
 These numbers come from `src/test_relocalization.py` (full pass through 0–300 to build/save the map, then a fresh tracker and relocalize at frame 155).
 
+**Dense RGB-D point cloud:** 265,288 vertices reconstructed from 300 frames, freiburg3 long office sequence.
+
 ## Stack
 
 - **NVIDIA cuVSLAM** — GPU-accelerated visual SLAM and odometry  
@@ -46,7 +48,8 @@ These numbers come from `src/test_relocalization.py` (full pass through 0–300 
 - GPU-accelerated SLAM pipeline  
 - 3D landmark visualization  
 - Map persistence and relocalization  
-- Dense reconstruction (Open3D TSDF)  
+- [x] Dense RGB-D point cloud reconstruction  
+- [ ] Dense reconstruction (Open3D TSDF)  
 - Semantic object detection (YOLOv8)  
 - Web-based 3D visualization  
 - Live deployment on Jetson Orin  
