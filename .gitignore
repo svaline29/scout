@@ -1,7 +1,12 @@
 data/
 *.rrd
+*.ply
+*.npz
+*.json
+*.pt
 __pycache__/
 *.pyc
 .env
 *.tgz
 *.zip
+.venv/

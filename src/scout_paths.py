@@ -21,12 +21,12 @@ def get_scratch_dir() -> str:
 
 def get_tum_dataset_dir(src_dir: str) -> str:
     """
-    TUM RGB-D sequence root (directory containing ``freiburg3_rig.yaml``).
+    TUM RGB-D sequence root (directory containing ``rgb.txt``).
 
     Resolution order:
     1. ``SCOUT_DATASET`` if set (absolute path).
     2. ``/export/scratch/<USER>/rgbd_dataset_freiburg3_long_office_household`` if it
-       exists and contains ``freiburg3_rig.yaml`` (keeps data off home quota).
+       exists and contains ``rgb.txt`` (keeps data off home quota).
     3. ``<repo>/src/dataset/rgbd_dataset_freiburg3_long_office_household`` (default).
     """
     override = os.environ.get("SCOUT_DATASET")
@@ -39,8 +39,8 @@ def get_tum_dataset_dir(src_dir: str) -> str:
         user,
         "rgbd_dataset_freiburg3_long_office_household",
     )
-    rig_scratch = os.path.join(scratch_ds, "freiburg3_rig.yaml")
-    if os.path.isfile(rig_scratch):
+    rgb_txt = os.path.join(scratch_ds, "rgb.txt")
+    if os.path.isfile(rgb_txt):
         return scratch_ds
 
     return os.path.join(
