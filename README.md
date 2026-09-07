@@ -1,67 +1,42 @@
-# Scout
+# Persistent Visual SLAM with Cold-Start Relocalization
 
-**GPU-accelerated semantic spatial mapping with persistent relocalization**
+An RGB-D pipeline built around NVIDIA's cuVSLAM. It loads TUM sequences, tracks camera pose, fuses depth into a dense point cloud, and saves the map so a fresh tracker can localize back into it from a cold start.
 
 ## What it does
 
-Scout is a system that builds **persistent 3D maps** of physical environments using **GPU-accelerated visual SLAM**, then **relocalizes** into those maps from a cold start so the camera pose is recovered against saved structure. The roadmap adds **semantic object detection** anchored to real-world coordinates for scene understanding on top of the map.
+cuVSLAM handles the visual odometry and map storage. The pipeline loads TUM RGB-D sequences with time-aligned color and depth frames, runs them through the tracker, fuses the depth into a dense world point cloud, saves the map to disk, and then measures whether a completely fresh tracker instance can localize itself back into that saved map from a cold start.
+
+The relocalization test builds a map over 301 frames, saves it, then hands a fresh tracker with no history the same scene and asks where it is. It gets within 5.99 mm at frame 155. cuVSLAM is what powers the matching.
 
 ## Results
 
-Validated on **TUM RGB-D [freiburg3 long office household](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/download)**:
+Tested on TUM RGB-D `freiburg3_long_office_household`:
 
 | Metric | Value |
-|--------|--------|
-| **Relocalization translation error** | **5.99 mm** (frame 155) |
-| **Map build** | **301 RGB-D pairs** (frame indices **0–300**; `FRAME_LIMIT` in `test_relocalization.py`) |
-| **Conditions** | Cold-start relocalization after map save; warm-up tracking on frames 150–155 before localization |
-
-These numbers come from `src/test_relocalization.py` (full pass through 0–300 to build/save the map, then a fresh tracker and relocalize at frame 155).
-
-**Dense RGB-D point cloud:** 265,288 vertices reconstructed from 300 frames, freiburg3 long office sequence.
+|---|---|
+| Relocalization translation error | 5.99 mm at frame 155 |
+| Map build | 301 RGB-D pairs (frames 0–300) |
+| Dense reconstruction | 265,288 vertices after 2 cm voxel downsampling |
+| Conditions | Cold start after map save, warm-up tracking on frames 150–155 |
 
 ## Stack
 
-- **NVIDIA cuVSLAM** — GPU-accelerated visual SLAM and odometry  
-- **Python 3.12** / **CUDA 12.9**  
-- **Rerun** — spatial visualization (trajectory, point cloud)  
-- **Open3D** — dense reconstruction (**upcoming**, e.g. TSDF fusion)  
-- **YOLOv8** — semantic object detection (**upcoming**)
+- **cuVSLAM** for GPU-accelerated visual odometry and map persistence
+- **Open3D** for dense RGB-D fusion and point cloud output
+- **YOLOv8** for object detection, back-projected into world coordinates using the tracked pose
+- **Rerun** for live trajectory, landmark, and detection visualization
+- Python 3.12, CUDA 12.9
 
-## Hardware
+Developed on an NVIDIA Tesla T4 through the UMN CSE compute cluster. 
 
-- **Development:** NVIDIA Tesla T4 (UMN CSE compute cluster)  
-- **Target deployment:** NVIDIA Jetson Orin Nano Super  
-
-## Project structure
-
-| Path | Role |
-|------|------|
-| `src/track_tum.py` | End-to-end TUM RGB-D tracking with **cuVSLAM** and **Rerun** visualization |
-| `src/map_manager.py` | Save/load **cuVSLAM** maps under a fixed on-disk layout |
-| `src/dataset_utils.py` | Load RGB-D frames and time-aligned pairs for TUM-style datasets |
-| `src/test_map_persistence.py` | Short integration run: build map, persist, relocalize |
-| `src/test_relocalization.py` | Longer-sequence relocalization test (frames 0–300 map, frame-155 error report) |
-
-## Roadmap
-
-- [x] GPU-accelerated SLAM pipeline
-- [x] 3D landmark visualization
-- [x] Map persistence and relocalization
-- [x] Dense RGB-D point cloud reconstruction
-- [ ] Dense reconstruction (Open3D TSDF)
-- [ ] Semantic object detection (YOLOv8)
-- [ ] Web-based 3D visualization
-- [ ] Live deployment on Jetson Orin
-
-## Usage
-
-Dataset paths and CUDA/cuVSLAM setup are environment-specific. Run the TUM scripts from the repo root with `PYTHONPATH` including `src`, for example:
-
+## Running it
+ 
+Paths and CUDA setup are environment-specific. Set `VSLAM_COLDSTART_SCRATCH` and `VSLAM_COLDSTART_DATASET`, or let them fall back to the defaults under the repo root. From the repo root with `src` on `PYTHONPATH`:
+ 
 ```bash
 python src/test_relocalization.py
-python src/test_map_persistence.py
+python src/dense_pointcloud.py
 python src/track_tum.py
 ```
-
-Ensure the TUM **freiburg3 long office household** dataset is available and that `TUM_DATASET_PATH` (or the path in each script) points to your local copy.
+ 
+Requires the TUM `freiburg3_long_office_household` dataset available locally.

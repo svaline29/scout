@@ -14,16 +14,11 @@ if _SRC not in sys.path:
 
 from dataset_utils import get_matched_rgbd_pairs, load_frame
 from map_manager import MapManager
+from paths import get_scratch_dir, get_tum_dataset_dir
 
-TUM_DATASET_PATH = (
-    "/home/valin019/cuVSLAM/examples/tum/dataset/"
-    "rgbd_dataset_freiburg3_long_office_household"
-)
-RIG_CONFIG_PATH = (
-    "/home/valin019/cuVSLAM/examples/tum/dataset/"
-    "rgbd_dataset_freiburg3_long_office_household/freiburg3_rig.yaml"
-)
-MAPS_DIR = "/home/valin019/scout/data/maps"
+TUM_DATASET_PATH = get_tum_dataset_dir(_SRC)
+RIG_CONFIG_PATH = os.path.join(TUM_DATASET_PATH, "freiburg3_rig.yaml")
+MAPS_DIR = os.path.join(get_scratch_dir(), "maps")
 FRAME_LIMIT = 200
 
 

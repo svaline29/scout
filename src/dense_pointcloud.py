@@ -15,6 +15,7 @@ if _SRC not in sys.path:
     sys.path.insert(0, _SRC)
 
 from dataset_utils import get_matched_rgbd_pairs, load_frame
+from paths import get_scratch_dir
 from test_map_persistence import (
     RIG_CONFIG_PATH,
     TUM_DATASET_PATH,
@@ -23,7 +24,7 @@ from test_map_persistence import (
 
 # Frames 0–300 inclusive (same convention as test_relocalization.py)
 FRAME_LIMIT = 301
-OUTPUT_PLY = "/home/valin019/scout/data/office_dense.ply"
+OUTPUT_PLY = os.path.join(get_scratch_dir(), "office_dense.ply")
 VOXEL_SIZE = 0.02
 PROJECT_EVERY = 10
 IMAGE_JITTER_THRESHOLD_NS = 40 * 1_000_000

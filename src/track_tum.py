@@ -8,7 +8,7 @@ import cuvslam
 from dataset_utils import load_frame, get_matched_rgbd_pairs
 from detection_store import DetectionStore
 from detector import Detector, pose_matrix_from_translation_quat
-from scout_paths import get_scratch_dir, get_tum_dataset_dir
+from paths import get_scratch_dir, get_tum_dataset_dir
 
 # TODO: move TUM freiburg3 intrinsics to config/freiburg3.yaml (hardcoded; no rig YAML on disk).
 # TUM freiburg3 calibration (official TUM values)
@@ -23,8 +23,8 @@ _SCRATCH_DIR = get_scratch_dir()
 tum_dataset_path = get_tum_dataset_dir(_SRC_DIR)
 
 OUTPUT_RRD = os.path.join(_SCRATCH_DIR, "tum_output.rrd")
-DETECTIONS_JSON = os.path.join(_SCRATCH_DIR, "scout_detections.json")
-POSES_NPZ = os.path.join(_SCRATCH_DIR, "scout_poses.npz")
+DETECTIONS_JSON = os.path.join(_SCRATCH_DIR, "detections.json")
+POSES_NPZ = os.path.join(_SCRATCH_DIR, "poses.npz")
 YOLO_MODEL = os.path.join(_SCRATCH_DIR, "yolov8n.pt")
 
 
